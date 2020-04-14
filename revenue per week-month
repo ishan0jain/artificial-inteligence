@@ -1,0 +1,56 @@
+
+# In[1]:
+import pandas as pd
+# In[2]:
+import numpy as np
+import matplotlib.pyplot as plt
+# In[3]:
+df_food=pd.read_csv('C:\\Users\\ishan\\Desktop\\train_GzS76OK\\train.csv')
+# In[4]:
+df_food.head()
+# In[5]:
+df_meal=pd.read_csv('C:\\Users\\ishan\\Desktop\\train_GzS76OK\\meal_info.csv')
+# In[6]:
+df_meal.head()
+# In[7]:
+df_center=pd.read_csv('C:\\Users\\ishan\\Desktop\\train_GzS76OK\\fulfilment_center_info.csv')
+# In[8]:
+df_center
+# In[9]:
+df=pd.merge(df_meal,df_food,on='meal_id')
+# In[10]:
+df.head()
+# In[11]:
+table = pd.pivot_table(data=df,index='category',values='num_orders',aggfunc=np.sum)
+table.head()
+# In[12]:
+table.plot(kind='bar')
+plt.xticks(rotation=70)
+plt.xlabel('food item')
+plt.ylabel('item sold')
+plt.title('most popular food')
+# In[13]:
+df['revenue']=df['num_orders']*df['checkout_price']
+# In[14]:
+table1=pd.pivot_table(data=df,index='week',values='revenue',aggfunc=np.sum)
+# In[63]:
+df['month']=((df['week']//4)+1)
+# In[64]:
+table2=pd.pivot_table(data=df,index='month',values='revenue',aggfunc=np.sum)
+# In[65]:
+table1.head()
+# In[66]:
+table2.head()
+# In[67]:
+ax=table1.plot()
+ax.set_xlim([-10,150])
+plt.title('weekly income')
+plt.xlabel('week')
+plt.ylabel('revenue')
+plt.tight_layout(3.0)
+ax1=table2.plot()
+ax1.set_xlim([-5,40])
+plt.title('monthly income')
+plt.xlabel('month')
+plt.ylabel('revenue')
+plt.tight_layout(3.0)
